@@ -1,0 +1,110 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+.pricing-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 2rem;
+}
+
+.pricing-card {
+    background: #1A9D90;
+    border-radius: 10px;
+    padding: 2rem;
+    width: 250px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: transform 0.3s;
+    color: #ffffff;
+}
+
+.pricing-card:hover {
+    transform: translateY(-10px);
+}
+
+.price {
+    font-size: 2.5rem;
+    margin: 1rem 0;
+    color: #ffffff;
+}
+
+.features {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 1rem;
+}
+
+.purchase-btn {
+    background-color: #ccc;
+    color: #000;
+    border: none;
+    border-radius: 5px;
+    padding: 0.75rem 1.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.purchase-btn:hover {
+    background-color: #ffffff;
+}
+
+.typography-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center;     /* Center vertically */
+    height: 14vh;           /* Take full viewport height */
+}
+
+.centered-typo {
+    text-align: center;      /* Ensure text is centered within the Typography component */
+}
+
+.loader {
+    border-top-color: #fff;  /* Use your preferred color */
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
+/* Animation for the error modal */
+@keyframes slideInError {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.error-modal {
+    animation: slideInError 0.3s forwards;
+    transform: translateY(-100%);
+    opacity: 0;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 10;
+}
+
+.border {
+    transition: all 0.3s ease-in-out;
+}
+
+.border-blue-500 {
+    box-shadow: 0 4px 14px rgba(0, 119, 255, 0.1);
+}
+
+/* On hover, scale the package card a bit for a subtle pop effect */
+.border:hover {
+    transform: scale(1.03);
+}
