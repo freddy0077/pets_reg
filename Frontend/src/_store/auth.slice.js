@@ -62,6 +62,20 @@ function createExtraActions() {
             }
         ),
 
+        memberOtp: createAsyncThunk(
+            `${name}/memberOtp`,
+            async ({ microchip_number }) => {
+                return await fetchWrapper.post(`${baseUrl}/api/v1/member/otp`, { microchip_number });
+            }
+        ),
+
+        loginWithOtp: createAsyncThunk(
+            `${name}/loginWithToken`,
+            async ({ token }) => {
+                return await fetchWrapper.post(`${baseUrl}/api/v1/member/otp_login`, { token });
+            }
+        ),
+
         getUser: createAsyncThunk(
             `${name}/user`,
             async () => {
@@ -107,6 +121,35 @@ function createExtraReducers() {
             console.log("error object", action);
         },
 
+
+        [extraActions.loginWithOtp.pending.toString()]: state => {
+            state.error = null;
+            state.isLoading = true;
+        },
+        [extraActions.loginWithOtp.fulfilled.toString()]: (state, action) => {
+            const user = action.payload;
+            localStorage.setItem('sm-user', JSON.stringify(user));
+            state.user = user;
+            state.isLoggedOut = false;
+        },
+        [extraActions.loginWithOtp.rejected.toString()]: (state, action) => {
+            state.isLoading = false;
+
+            if (action.error.message.includes("401")) {
+                state.error = { message: "Username or password is incorrect!" };
+                return;
+            } else if (action.error.message.includes("403")) {
+                state.error = { message: "Account not activated or license has expired!" };
+                return;
+            } else if (action.error.message.includes("400")) {
+                state.error = { message: "Username and password are required!" };
+                return;
+            }
+
+            state.error = action.error.message;
+            console.log("error object", action);
+        },
+
         [extraActions.verifySms.pending.toString()]: state => {
             state.error = null;
         },
@@ -114,6 +157,17 @@ function createExtraReducers() {
             state.isVerified = action.payload.verified;
         },
         [extraActions.verifySms.rejected.toString()]: (state, action) => {
+            state.isVerified = false;
+            state.error = action.payload;
+        },
+
+        [extraActions.memberOtp.pending.toString()]: state => {
+            state.error = null;
+        },
+        [extraActions.memberOtp.fulfilled.toString()]: (state, action) => {
+            state.isVerified = action.payload.verified;
+        },
+        [extraActions.memberOtp.rejected.toString()]: (state, action) => {
             state.isVerified = false;
             state.error = action.payload;
         }

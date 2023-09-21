@@ -6,6 +6,7 @@ import axios from "axios";
 import {DataProvider} from "../../data";
 import PetHandlers from "../../data/pets/PetHandlers";
 import {randomUUID} from "crypto";
+import UserHandlers from "../../data/users/UserHandlers";
 
 export const attachPublicRoutes = (app: express.Application): void => {
 
@@ -15,6 +16,7 @@ export const attachPublicRoutes = (app: express.Application): void => {
   app.get('/api/v1/users', Auth.authorize(), users.getUsers)
   // app.get('/api/v1/member/otp', Auth.authorize(), users.sendMemberOtp)
   app.post('/api/v1/member/otp', users.sendMemberOtp)
+  app.post('/api/v1/member/otp-login', users.otpLogin)
 
 
   app.post('/api/v1/payments', express.json(), async (req, res) => {
@@ -57,6 +59,7 @@ export const attachPublicRoutes = (app: express.Application): void => {
         email: ownerEmail,
         amount: 2,
         reference: petObject?.id,
+        callback_url: "http://petsreg.com:5008/callback-endpoint",
       };
 
       const response = await initializePayment(paymentData, apiKey);
@@ -95,7 +98,15 @@ export const attachPublicRoutes = (app: express.Application): void => {
 
   app.get('/callback-endpoint', async (req, res) => {
     //@ts-ignore
-    const reference = req.query.reference;
+    const reference = req.query.reference.toString();
+
+    const data = await DataProvider.create()
+    const handler = await PetHandlers.create(data)
+
+    await handler.update({
+      id: reference,
+      active: true
+    })
 
     // Use the reference to verify the transaction with Paystack's API
     // If successful, fulfill the user's order or service request
@@ -116,8 +127,29 @@ export const attachPublicRoutes = (app: express.Application): void => {
   const insertPetData = async (petData) => {
     const data = await DataProvider.create();
     const petsHandler = await PetHandlers.create(data);
+    const userHandler = await UserHandlers.create(data)
 
-    return await petsHandler.insert(petData);
+    const user_id = randomUUID().toString()
+    await userHandler.insert({
+      id: user_id,
+      email: petData.owner_email,
+      first_name: petData.owner_full_name?.split(" ")[0],
+      last_name: petData.owner_full_name?.split(" ")?.[1],
+      phone_number: petData.primary_phone,
+      secondary_phone_number: petData.secondary_phone_number
+    })
+    return await petsHandler.insert({
+      id: randomUUID().toString(),
+      pet_name: petData.petName,
+      pet_type: petData?.petType,
+      breed: petData?.breed,
+      color: petData.color,
+      dob: petData.dob,
+      microchip_number: petData.microchipNumber,
+      sex: petData.sex,
+      special_mark: petData.specialMark,
+      special_notes: petData.specialNotes
+    });
   }
 
   //Doctor routes

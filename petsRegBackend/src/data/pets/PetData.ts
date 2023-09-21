@@ -11,18 +11,13 @@ export interface Pet {
   pet_type?: string
   breed?: string
   special_mark?: string
-  owner_full_name?: string
-  primary_phone?: string
-  secondary_phone?: string
-  location?: string
-  owner_address?: string
-  owner_email?: string
   age?: string
   color?: string
   weight?: string
   microchip_number?: string
   special_notes?: string
   profile_picture_url?: string
+  user_id?: string
   created_at?: string
   updated_at?: string
   terms_accepted?: boolean
@@ -46,18 +41,13 @@ export interface GetInput {
   pet_type?: string
   breed?: string
   special_mark?: string
-  owner_full_name?: string
-  primary_phone?: string
-  secondary_phone?: string
-  location?: string
-  owner_address?: string
-  owner_email?: string
   age?: string
   color?: string
   weight?: string
   microchip_number?: string
   special_notes?: string
   profile_picture_url?: string
+  user_id?: string
   created_at?: string
   updated_at?: string
   terms_accepted?: boolean

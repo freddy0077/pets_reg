@@ -1,47 +1,39 @@
 /* tslint:disable await-promise */
 import {QueryBuilder} from 'knex'
 import {DataClient} from '../index'
-// import {Database} from '../../config'
 
-export interface User {
-  id: string
-  email?: string
-  username?: string
-  password?: string
-  first_name?: string
-  last_name?: string
-  phone_number?: string
-  secondary_phone_number?: string
-  address?: string
-  location?: string
+export interface OtpLogin {
+  id?: string
+  user_id?: string
+  otp_code?: string
+  expiration_time?: string
+  used?: boolean
+  channel?: string
 }
-
 
 export interface Data {
   get: ReturnType<typeof get>,
   getAll: ReturnType<typeof getAll>,
   update: ReturnType<typeof update>,
   insert: ReturnType<typeof insert>,
-  deleteUser: ReturnType<typeof deleteUser>,
+  deleteOtp: ReturnType<typeof deleteOtp>,
 }
 
 export interface GetInput {
   id?: string
-  email?: string
-  username?: string
-  password?: string
-  first_name?: string
-  last_name?: string
-  phone_number?: string
-  secondary_phone_number?: string
-  address?: string
-  location?: string
+  user_id?: string
+  otp_code?: string
+  expiration_time?: string
+  used?: boolean
+  channel?: string
 }
 
 export const get = (queryBuilder: () => QueryBuilder) => async (input: GetInput) => {
+  // return  queryBuilder().select().where(input).first()
 
-  const qb = queryBuilder().select('users.*')
-      .from('users')
+  const qb = queryBuilder().select('otp_logins.*', 'users.email','users.firstName', "users.lastName", "users.phone_number")
+      .leftJoin("users", "users.id","otp_logins.user_id")
+      .from('otp_logins')
       .where(input)
 
   return qb.first()
@@ -59,32 +51,31 @@ export const update = (queryBuilder: () => QueryBuilder) => async (input: GetInp
   const { id, ...updateFields } = input;
 
   if (!id) {
-    throw new Error("An ID must be provided to update a user.");
+    throw new Error("An ID must be provided to update an otp.");
   }
 
   return (await queryBuilder().where({ id }).update(updateFields, ['id']) as [{id: string}])[0];
 }
 
-export const deleteUser = (queryBuilder: () => QueryBuilder) => async (input: GetInput) => {
+export const deleteOtp = (queryBuilder: () => QueryBuilder) => async (input: GetInput) => {
   const { id } = input;
 
   if (!id) {
-    throw new Error("An ID must be provided to delete a user.");
+    throw new Error("An ID must be provided to delete an otp.");
   }
 
   return (await queryBuilder().where({ id }).del() as number);
 }
 
 export async function create (data: DataClient): Promise<Data> {
-  // const users = () => data.postgres.withSchema(Database.schema).table('User')
-  const users = () => data.postgres.table('users')
+  const otp = () => data.postgres.table('otp_logins')
 
   return {
-    get:           get(users),
-    getAll:        getAll(users),
-    update:        update(users),
-    insert:        insert(users),
-    deleteUser:    deleteUser(users),
+    get:           get(otp),
+    getAll:        getAll(otp),
+    update:        update(otp),
+    insert:        insert(otp),
+    deleteOtp:    deleteOtp(otp),
   }
 }
 

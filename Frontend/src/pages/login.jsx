@@ -15,6 +15,7 @@ function LoginComponent() {
     const [errors, setErrors] = useState({ email: '', password: '' });
     const [otpTimer, setOtpTimer] = useState(null);
     const [canResendOtp, setCanResendOtp] = useState(false);
+    const[errorMessage, setErrorMessage] = useState(null)
 
     const startOtpTimer = () => {
         let timeRemaining = 60; // 60 seconds
@@ -83,12 +84,16 @@ function LoginComponent() {
             // Logic to request OTP goes here
             setShowOtp(true);
 
+            dispatch(authActions.memberOtp({microchip_number: microchip}))
+
             const timer = startOtpTimer();
             return () => {
                 clearInterval(timer);  // Cleanup timer on unmount
             };
             return;
         }
+
+
 
         // Continue with the actual member login logic here if OTP check has passed
     };
@@ -106,7 +111,17 @@ function LoginComponent() {
                         navigate("/dashboard");
                     }, 2000)
                 }else{
-                    // setErrorMessage("Unable to login at this time. Try again later!")
+                    if (res?.error?.message?.includes("401")){
+                        setErrorMessage("Username or password not correct!")
+                        return
+                    }
+
+                    if (res?.error?.message?.includes("404")){
+                        setErrorMessage("Member with the given microchip number not found!")
+                        return
+                    }
+
+                    setErrorMessage("Unable to login at this time. Try again later!")
                 }
             })
     };
@@ -215,6 +230,7 @@ function LoginComponent() {
                             </div>
                         </div>
                     </div>
+                    <p>{errorMessage}</p>
 </>
 
                     )}

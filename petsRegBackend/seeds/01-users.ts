@@ -15,7 +15,7 @@ exports.seed = async function() {
         return  users().insert([
         {
             id: randomUUID().toString(),
-            phone_number: '233242953673', email: "frederickankamah988@gmail.com",
+            phone_number: '233242953672', email: "frederickankamah988@gmail.com",
             password: hashedPassword,
             role: "super-admin"
         },

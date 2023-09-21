@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {TopNavbar} from "../../../public/TopNavBar";
-import { FaStar } from 'react-icons/fa';
 import { FaGem, FaCrown, FaUser } from 'react-icons/fa';
 import {useDispatch, useSelector} from "react-redux";
 import {paymentActions} from "@/_store"; // Assuming you're using 'react-icons'
@@ -61,6 +60,8 @@ function RegistrationForm() {
     const [errors, setErrors] = useState({});
     const [selectedPackage, setSelectedPackage] = useState(null);
     const [isModalOpen, setModalOpen] = useState(false);
+    const [emailChecked, setEmailChecked] = useState(false); // New state
+    const [isEmailValid, setIsEmailValid] = useState(false);
     const dispatch = useDispatch()
 
     console.log("Payment", payment)

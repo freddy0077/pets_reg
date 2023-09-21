@@ -17,6 +17,8 @@ export async function up (knex: Knex) {
     table.string('password', 255);
     table.string('role', 100);
     table.string('phone_number', 20);
+    table.string('secondary_phone_number', 20);
+    table.string('location', 255);
     table.string('address', 255);
     table.string('city', 255);
     table.string('state_province', 255);

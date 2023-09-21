@@ -5,6 +5,7 @@ import {generateToken} from "../utils/auth";
 import bcrypt from 'bcrypt';
 import {parseJwt} from "../utils/generalUtils";
 import PetHandlers from "../data/pets/PetHandlers";
+import OtpLoginHandlers from "../data/otpLogin/OtpLoginHandlers";
 
 export const getUsers =
     catchErrors(async (req, res) => {
@@ -48,12 +49,6 @@ export const login =
                 token
             }
 
-            if (userObject.coordinator){
-                return res.respond({
-                    ...jsonInfo
-                });
-            }
-
             return res.respond({
                 ...jsonInfo
             });
@@ -63,27 +58,125 @@ export const login =
     })
 
 
-export const sendMemberOtp =
-    catchErrors(async (req, res) => {
-        const data = await DataProvider.create()
-        const { microchip_number } = req.body;
+export const otpLogin = catchErrors(async (req, res) => {
+    // Initialize your data provider or database connection
+    const data = await DataProvider.create();
 
-        if (!microchip_number) {
-            return res.status(400).send("Microchip number is required!");
-        }
+    // Extract the OTP from the request body
+    const { otp } = req.body;
 
-        const memberExists = await (await PetHandlers.create(data)).get({microchip_number})
+    // Check if the OTP is provided
+    if (!otp) {
+        return res.status(400).send("OTP is required!");
+    }
 
-        if (memberExists) {
-            const otp = generateOtp();
-            await sendSms({
-                numbers: "233242953672",
-                message: `Your verification code from Pets Registry is: ${otp}. Please do not share this code with anyone.`
-            });
+    // Fetch the OTP details from the database
+    const userHandler = await UserHandlers.create(data);
+    const otpHandler = await OtpLoginHandlers.create(data);
+    const otpDetails = await otpHandler.get({ otp_code: otp });
 
-            return res.respond({});
-        }
+    // Check if the OTP exists
+    if (!otpDetails) {
+        return res.status(400).send("Invalid OTP.");
+    }
+
+    // Check if the OTP has already been used
+    if (otpDetails.used) {
+        return res.status(400).send("This OTP has already been used.");
+    }
+
+    // Check if the OTP has expired
+    const currentTime = Date.now();
+    const otpExpirationTime = new Date(otpDetails.expiration_time).getTime();
+
+    if (currentTime > otpExpirationTime) {
+        return res.status(400).send("This OTP has expired.");
+    }
+
+    await otpHandler.update({used: true})
+
+    // Here, the OTP is valid. You can continue with authentication and set the OTP to 'used'.
+    // e.g., await otpHandler.markAsUsed(otpDetails.otp_id);
+
+    const userObject = await userHandler.get({id: otpDetails.user_id})
+    const token = generateToken(userObject)
+    const jsonInfo = {
+        ...userObject,
+        token
+    }
+
+    return res.respond({
+        ...jsonInfo
     });
+
+});
+
+
+
+
+// export const sendMemberOtp =
+//     catchErrors(async (req, res) => {
+//         const data = await DataProvider.create()
+//         const { microchip_number } = req.body;
+//
+//         if (!microchip_number) {
+//             return res.status(400).send("Microchip number is required!");
+//         }
+//
+//         const memberExists = await (await PetHandlers.create(data)).get({microchip_number})
+//
+//         console.log("Member exists", memberExists)
+//
+//         if (memberExists) {
+//             const otp = generateOtp();
+//             await sendSms({
+//                 numbers: memberExists.primary_phone,
+//                 message: `Your verification code from Pets Registry is: ${otp}. Please do not share this code with anyone.`
+//             });
+//
+//             return res.respond({});
+//         }
+//     });
+//
+
+export const sendMemberOtp = catchErrors(async (req, res) => {
+    // Initialize your data provider or database connection
+    const data = await DataProvider.create();
+
+    // Extract the microchip_number from the request body
+    const { microchip_number } = req.body;
+
+    if (!microchip_number) {
+        return res.status(400).send("Microchip number is required!");
+    }
+
+    // Fetch member details using the microchip_number
+    // const otpHandler = await OtpLoginHandlers.create(data);
+    const petHandler = await PetHandlers.create(data);
+    const memberExists = await petHandler.get({ microchip_number });
+
+    if (!memberExists) {
+        return res.status(404).send("Member with the given microchip number not found.");
+    }
+
+    // Generate OTP and send via SMS
+    const otp = generateOtp();
+
+    await sendSms({
+        numbers: memberExists.primary_phone,
+        message: `Your verification code from Pets Registry is: ${otp}. Please do not share this code with anyone.`
+    });
+
+    // otpHandler.insert({
+    //     id:
+    // })
+
+    // Here you would store the generated OTP in your database with related details like expiration_time, used status, etc.
+    // e.g., await otpHandler.save({ otp_code: otp, user_id: memberExists.id, expiration_time: ... , used: false });
+
+    return res.respond({});
+});
+
 
 //@ts-ignore
 const sendSms = async ({ numbers, message }) => {
@@ -93,7 +186,7 @@ const sendSms = async ({ numbers, message }) => {
         key: "4g6s68e)o5fmhax6dv!_3e8(nu9_v_ji3sz@@hc1npwec)3v5l7bvj98vysdxc_s",
         msisdn: `${numbers}`,
         message: `${message}`,
-        sender_id: "PETREG"
+        sender_id: "PETSREG"
     };
 
     fetch(url, {
