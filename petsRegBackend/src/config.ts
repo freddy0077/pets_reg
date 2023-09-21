@@ -6,7 +6,7 @@ export namespace Database {
     // NOTE: DATABASE_URL format will need to change for MySQL if used.
     // export const url = process.env.DATABASE_URL || 'mysql://root:password@localhost:3306/changeMgDB';
     // export const url = process.env.DATABASE_URL || 'mysql://root:password@localhost:3306/changeMgDB';
-    export const url = process.env.DATABASE_URL || 'mysql://root@localhost:3306/pets_reg_db';
+    export const url = process.env.DATABASE_URL || 'mysql://pets_reg_user:M@roon$$88@localhost:3306/pets_reg_db';
 
     console.log("mysql db", url)
 
