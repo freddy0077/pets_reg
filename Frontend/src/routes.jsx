@@ -19,6 +19,9 @@ import {MembershipSignUp} from "@/pages/MembershipSignUp";
 import AdminLoginComponent from "@/admin-login";
 import DoctorEarnings from "@/pages/doctors/DoctorEarnings";
 import Patients from "@/pages/pets/patients";
+import {Packages} from "@/pages/Packages";
+import LostAndFound from "@/pages/LostAndFound";
+import NewLost from "@/pages/NewLost";
 
 export const routes = [
   {
@@ -68,6 +71,14 @@ export const routes = [
     element: <PrivateRoute><PaginatedDoctorsTable /></PrivateRoute>,
   },
 
+
+  {
+    icon: ArrowRightOnRectangleIcon,
+    name: "Lost And Found",
+    path: "/lost-found",
+    element: <PrivateRoute><LostAndFound /></PrivateRoute>,
+  },
+
   {
     icon: ArrowRightOnRectangleIcon,
     name: "Pets",
@@ -104,6 +115,22 @@ export const routes = [
     element: <PrivateRoute><VertRegistration /></PrivateRoute>,
   },
 
+
+
+  {
+    icon: ArrowRightOnRectangleIcon,
+    name: "Lost and Found",
+    path: "/new-lost",
+    element: <PrivateRoute><NewLost /></PrivateRoute>,
+  },
+
+  {
+    icon: ArrowRightOnRectangleIcon,
+    name: "Dashboard",
+    path: "/lost-found",
+    element: <PrivateRoute><VertRegistration /></PrivateRoute>,
+  },
+
   {
     icon: ArrowRightOnRectangleIcon,
     name: "Pet Registration",
@@ -122,7 +149,7 @@ export const routes = [
     icon: ArrowRightOnRectangleIcon,
     name: "Pet Medical Form",
     path: "/packages",
-    element: <MembershipSignUp />,
+    element: <Packages />,
   },
 
   // {

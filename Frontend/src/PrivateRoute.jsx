@@ -8,6 +8,12 @@ const PrivateRoute = ({ children }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { user: authUser } = useSelector(state => state.auth);
+    const { user } = useSelector(state => state.auth);
+
+    const isAdmin = user?.role?.includes('admin');
+    const isDoctor = user?.role?.includes('doctor');
+    const isMember = user?.role?.includes('member');
+
     const [loading, setLoading] = useState(true);
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 

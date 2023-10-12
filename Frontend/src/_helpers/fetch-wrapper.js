@@ -36,8 +36,6 @@ function request(method) {
 // helper functions
 function authHeader(url) {
     const token = authToken();
-    const isLoggedIn = !!token;
-    const isApiUrl = url.startsWith(baseUrl);
 
     return { Authorization: `Bearer ${token}` };
 }

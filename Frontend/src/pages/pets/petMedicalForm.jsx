@@ -42,11 +42,12 @@ function MedicalForm() {
         sex: '',
         petType: '',
         breed: '',
-        allergies: [{ value: '', date: '', doctor: '' }],
-        chronicConditions: [{ value: '', date: '', doctor: '' }],
-        surgeries: [{ value: '', date: '', doctor: '' }],
-        medications: [{ value: '', date: '', doctor: '' }],
-        vaccinations: [{ vaccineName: '', dateAdministered: '', nextDueDate: '', doctor: '' }],
+        allergies: [{ value: '', date: '', doctor: '', doctorsNotes: '' }],
+        chronicConditions: [{ value: '', date: '', doctor: '', doctorsNotes: '' }],
+        surgeries: [{ value: '', date: '', doctor: '', doctorsNotes: '' }],
+        medications: [{ value: '', date: '', doctor: '', doctorsNotes: '' }],
+        vaccinations: [{ vaccineName: '', dateAdministered: '', nextDueDate: '', doctor: '', doctorsNotes: '' }],
+
     });
 
     const handleFieldChange = (field, index, e) => {
@@ -60,11 +61,18 @@ function MedicalForm() {
 
     const addFieldEntry = (field) => {
         const newFieldData = [...formData[field]];
+        // if (field === 'vaccinations') {
+        //     newFieldData.push({ vaccineName: '', dateAdministered: '', nextDueDate: '', doctor: '' });
+        // } else {
+        //     newFieldData.push({ value: '', date: '', doctor: '' });
+        // }
+
         if (field === 'vaccinations') {
-            newFieldData.push({ vaccineName: '', dateAdministered: '', nextDueDate: '', doctor: '' });
+            newFieldData.push({ vaccineName: '', dateAdministered: '', nextDueDate: '', doctor: '', doctorsNotes: '' });
         } else {
-            newFieldData.push({ value: '', date: '', doctor: '' });
+            newFieldData.push({ value: '', date: '', doctor: '', doctorsNotes: '' });
         }
+
         setFormData({
             ...formData,
             [field]: newFieldData
@@ -89,9 +97,11 @@ function MedicalForm() {
                     <InputField errors={errors} label="Allergy" name="value" type="text" value={entry.value} onChange={e => handleFieldChange('allergies', index, e)} />
                     <InputField errors={errors} label="Date" name="date" type="date" value={entry.date} onChange={e => handleFieldChange('allergies', index, e)} />
                     <InputField errors={errors} label="Doctor" name="doctor" type="text" value={entry.doctor} onChange={e => handleFieldChange('allergies', index, e)} />
+                    <InputField errors={errors} label="Doctor's Notes" name="doctorsNotes" type="textarea" value={entry.doctorsNotes} onChange={e => handleFieldChange('allergies', index, e)} />
+
                 </div>
             ))}
-            <button type="button" onClick={() => addFieldEntry('allergies')} className="mb-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300">Add Another Allergy Entry</button>
+            <button type="button" onClick={() => addFieldEntry('allergies')} className="mb-4 bg-fdbc0e text-white px-4 py-2 rounded transition duration-300">Add Another Allergy Entry</button>
 
             {/* Chronic Conditions */}
             {formData.chronicConditions.map((entry, index) => (
@@ -100,9 +110,10 @@ function MedicalForm() {
                     <InputField errors={errors} label="Condition" name="value" type="text" value={entry.value} onChange={e => handleFieldChange('chronicConditions', index, e)} />
                     <InputField errors={errors} label="Date" name="date" type="date" value={entry.date} onChange={e => handleFieldChange('chronicConditions', index, e)} />
                     <InputField errors={errors} label="Doctor" name="doctor" type="text" value={entry.doctor} onChange={e => handleFieldChange('chronicConditions', index, e)} />
+                    <InputField errors={errors} label="Doctor's Notes" name="doctorsNotes" type="textarea" value={entry.doctorsNotes} onChange={e => handleFieldChange('allergies', index, e)} />
                 </div>
             ))}
-            <button type="button" onClick={() => addFieldEntry('chronicConditions')} className="mb-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300">Add Another Chronic Condition Entry</button>
+            <button type="button" onClick={() => addFieldEntry('chronicConditions')} className="mb-4 bg-fdbc0e text-white px-4 py-2 rounded transition duration-300">Add Another Chronic Condition Entry</button>
 
             {/* Surgeries */}
             {formData.surgeries.map((entry, index) => (
@@ -111,9 +122,11 @@ function MedicalForm() {
                     <InputField errors={errors} label="Surgery" name="value" type="text" value={entry.value} onChange={e => handleFieldChange('surgeries', index, e)} />
                     <InputField errors={errors} label="Date" name="date" type="date" value={entry.date} onChange={e => handleFieldChange('surgeries', index, e)} />
                     <InputField errors={errors} label="Doctor" name="doctor" type="text" value={entry.doctor} onChange={e => handleFieldChange('surgeries', index, e)} />
+                    <InputField errors={errors} label="Doctor's Notes" name="doctorsNotes" type="textarea" value={entry.doctorsNotes} onChange={e => handleFieldChange('allergies', index, e)} />
+
                 </div>
             ))}
-            <button type="button" onClick={() => addFieldEntry('surgeries')} className="mb-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300">Add Another Surgery Entry</button>
+            <button type="button" onClick={() => addFieldEntry('surgeries')} className="mb-4 bg-fdbc0e text-white px-4 py-2 rounded transition duration-300">Add Another Surgery Entry</button>
 
             {/* Medications */}
             {formData.medications.map((entry, index) => (
@@ -122,9 +135,11 @@ function MedicalForm() {
                     <InputField errors={errors} label="Medication" name="value" type="text" value={entry.value} onChange={e => handleFieldChange('medications', index, e)} />
                     <InputField errors={errors} label="Date" name="date" type="date" value={entry.date} onChange={e => handleFieldChange('medications', index, e)} />
                     <InputField errors={errors} label="Doctor" name="doctor" type="text" value={entry.doctor} onChange={e => handleFieldChange('medications', index, e)} />
+                    <InputField errors={errors} label="Doctor's Notes" name="doctorsNotes" type="textarea" value={entry.doctorsNotes} onChange={e => handleFieldChange('allergies', index, e)} />
+
                 </div>
             ))}
-            <button type="button" onClick={() => addFieldEntry('medications')} className="mb-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300">Add Another Medication Entry</button>
+            <button type="button" onClick={() => addFieldEntry('medications')} className="mb-4 bg-fdbc0e text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300">Add Another Medication Entry</button>
 
             {/* Vaccinations */}
             {formData.vaccinations.map((entry, index) => (
@@ -134,13 +149,15 @@ function MedicalForm() {
                     <InputField errors={errors} label="Date Administered" name="dateAdministered" type="date" value={entry.dateAdministered} onChange={e => handleFieldChange('vaccinations', index, e)} />
                     <InputField errors={errors} label="Next Due Date" name="nextDueDate" type="date" value={entry.nextDueDate} onChange={e => handleFieldChange('vaccinations', index, e)} />
                     <InputField errors={errors} label="Doctor" name="doctor" type="text" value={entry.doctor} onChange={e => handleFieldChange('vaccinations', index, e)} />
+                    <InputField errors={errors} label="Doctor's Notes" name="doctorsNotes" type="textarea" value={entry.doctorsNotes} onChange={e => handleFieldChange('allergies', index, e)} />
+
                 </div>
             ))}
-            <button type="button" onClick={() => addFieldEntry('vaccinations')} className="mb-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition duration-300">Add Another Vaccination Entry</button>
+            <button type="button" onClick={() => addFieldEntry('vaccinations')} className="mb-4 bg-fdbc0e text-white px-4 py-2 rounded transition duration-300">Add Another Vaccination Entry</button>
 
             {/* Submit Button */}
             <div className="flex items-center justify-center mt-4">
-                <button className="bg-blue-800 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition duration-300" type="submit">Submit</button>
+                <button className="bg-e84f25 text-white px-6 py-2 rounded-full hover:bg-blue-700 transition duration-300" type="submit">Submit</button>
             </div>
         </form>
     );
@@ -150,17 +167,29 @@ function InputField({ label, name, type, value, onChange, errors }) {
     return (
         <div className="mb-4">
             <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor={name}>{label}</label>
-            <input
-                className={`shadow appearance-none border ${errors[name] ? "border-red-500" : ""} rounded-full w-full py-2 px-3 text-gray-700`}
-                id={name}
-                name={name}
-                type={type}
-                value={value}
-                onChange={onChange}
-            />
+            {type === "textarea" ? (
+                <textarea
+                    className={`shadow appearance-none border ${errors[name] ? "border-red-500" : ""} rounded w-full py-2 px-3 text-gray-700`}
+                    id={name}
+                    name={name}
+                    value={value}
+                    onChange={onChange}
+                    rows="4"
+                ></textarea>
+            ) : (
+                <input
+                    className={`shadow appearance-none border ${errors[name] ? "border-red-500" : ""} rounded-full w-full py-2 px-3 text-gray-700`}
+                    id={name}
+                    name={name}
+                    type={type}
+                    value={value}
+                    onChange={onChange}
+                />
+            )}
             {errors[name] && <p className="text-red-500 text-xs mt-1">{errors[name]}</p>}
         </div>
     );
 }
+
 
 export default PetMedicalForm;

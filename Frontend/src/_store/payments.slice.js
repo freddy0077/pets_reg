@@ -6,6 +6,7 @@ const baseUrl = import.meta.env.VITE_API_ENDPOINT;
 
 const initialState = {
     payment: null,
+    paymentVerified: false,
     payments: null,
     isLoading: false,
     error: null
@@ -18,6 +19,10 @@ const getPayments = createAsyncThunk(`${paymentName}/getPayments`, async () => {
 
 const getPaymentById = createAsyncThunk(`${paymentName}/getPaymentById`, async ({ id }) => {
     return await fetchWrapper.get(`${baseUrl}/api/v1/payments/${id}`);
+});
+
+const verifyPayment = createAsyncThunk(`${paymentName}/verifyPayment`, async ({ id }) => {
+    return await fetchWrapper.get(`${baseUrl}/api/v1/payments/verify/${id}`);
 });
 
 const createPayment = createAsyncThunk(`${paymentName}/createPayment`, async (payment) => {
@@ -54,6 +59,17 @@ const paymentSlice = createSlice({
                 state.payment = action.payload;
                 state.error = null;
             })
+
+            .addCase(verifyPayment.pending, (state, action) => {
+                state.isLoading = true;
+                state.error = null;
+            })
+
+            .addCase(verifyPayment.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.paymentVerified = action.payload;
+                state.error = null;
+            })
     },
 });
 
@@ -62,6 +78,7 @@ export const paymentActions = {
     getPayments,
     getPaymentById,
     createPayment,
+    verifyPayment,
     deletePayment,
     updatePayment,
 };

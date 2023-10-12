@@ -108,3 +108,8 @@
 .border:hover {
     transform: scale(1.03);
 }
+
+.animal-icon {
+    position: absolute;
+    /* Add other styles as needed */
+}

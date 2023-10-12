@@ -273,12 +273,15 @@ function LoginComponent() {
 
                     {role === 'member' && (
                         <button
+                            onClick={() => {
+                                showOtp ? alert("hello") : "no hello"
+                            }}
                             type="submit"
-                            // className={`group relative w-full flex justify-center items-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 ${loading ? 'bg-e84f25 cursor-not-allowed' : 'bg-fdbc0e hover:bg-e84f25'} focus:ring-e84f25`}
                             className={`group relative w-full flex justify-center items-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white focus:outline-none focus:ring-2 focus:ring-offset-2 ${loading ? 'bg-fdbc0e20 cursor-not-allowed' : 'bg-fdbc0e hover:bg-fdbc0e'} focus:ring-fdbc0e`}
                         >
                             {showOtp ? "Submit OTP" : "Sign In"}
                         </button>
+
                     )}
 
                     {role === 'doctor' && (

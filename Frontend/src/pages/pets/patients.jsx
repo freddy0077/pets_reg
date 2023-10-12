@@ -2,61 +2,20 @@ import React, {useEffect, useState} from 'react';
 import {TopNavbar} from "../../../public/TopNavBar";
 import birthdayIcon from '../../../public/img/birthday-cake.svg';
 import {useNavigate} from "react-router";
-import {useSelector} from "react-redux"; // Import a birthday icon if you have one
+import {useSelector} from "react-redux";
+import {Pets} from "@/pages/Utils/Pets";
+import {Header} from "@/pages/Utils/Common"; // Import a birthday icon if you have one
 
 function Patients() {
-    const Pets = [
-        {
-            name: 'Pet 1',
-            dob: '14-09-2000',
-            birthday:'14-09',
-            sex: 'male',
-            type: 'Dog',
-            tattooNumber: '625625353232'
-        },
-
-        {
-            name: 'Pet 2',
-            dob: '01-01-2000',
-            birthday:'15-09',
-            sex: 'female',
-            type: 'Dog',
-            tattooNumber: '625625353232'
-        },
-
-        {
-            name: 'Pet 3',
-            dob: '01-01-2000',
-            birthday:'16-09',
-            sex: 'male',
-            type: 'Dog',
-            tattooNumber: '625625353232'
-        },
-
-
-    ];
 
     return (
         <div className="h-screen bg-gray-100">
             <TopNavbar />
             <div className="flex flex-col h-full">
-                <Header />
+                <Header name={"Patients"} />
                 <MainContent Pets={Pets} />
-
             </div>
         </div>
-    );
-}
-
-
-function Header() {
-    return (
-        <header className="bg-white shadow-sm flex justify-between items-center p-4 mt-12">
-            <div className="text-2xl font-semibold text-gray-900">Pets</div>
-            <div className="space-x-4 mt-5">
-                <button className="bg-blue-800 text-white px-4 py-1.5 rounded hover:bg-blue-700">Logout</button>
-            </div>
-        </header>
     );
 }
 
