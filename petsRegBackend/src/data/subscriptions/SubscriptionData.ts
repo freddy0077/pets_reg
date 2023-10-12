@@ -3,13 +3,15 @@ import {QueryBuilder} from 'knex'
 import {DataClient} from '../index'
 // import {Database} from '../../config'
 
-export interface SubscriptionPlan {
+export interface Subscription {
   id?: string
-  name?: string
-  price?: number
-  duration?: number
+  user_id?: string
+  pet_id?: string
+  plan_id?: string | null
+  promo_code_id?: string
+  start_date?: string
+  end_date?: string
 }
-
 
 export interface Data {
   get: ReturnType<typeof get>,
@@ -21,18 +23,22 @@ export interface Data {
 
 export interface GetInput {
   id?: string
-  name?: string
-  price?: number
-  duration?: number
+  user_id?: string
+  pet_id?: string
+  plan_id?: string|null
+  promo_code_id?: string
+  start_date?: string
+  end_date?: string
+
 }
 
 export const get = (queryBuilder: () => QueryBuilder) => async (input: GetInput) => {
 
-  const qb = queryBuilder().select('plans.*')
-      .from('plans')
+  const qb = queryBuilder().select('user_subscriptions.*')
+      .from('user_subscriptions')
       .where(input)
 
-  return qb.first()
+  return qb.orderBy("created_at", "DESC").first()
 }
 
 export const getAll = (queryBuilder: () => QueryBuilder) => async (input: GetInput) => {
@@ -47,7 +53,7 @@ export const update = (queryBuilder: () => QueryBuilder) => async (input: GetInp
   const { id, ...updateFields } = input;
 
   if (!id) {
-    throw new Error("An ID must be provided to update a plan.");
+    throw new Error("An ID must be provided to update a subscription.");
   }
 
   return (await queryBuilder().where({ id }).update(updateFields, ['id']) as [{id: string}])[0];
@@ -57,14 +63,14 @@ export const deletePlan = (queryBuilder: () => QueryBuilder) => async (input: Ge
   const { id } = input;
 
   if (!id) {
-    throw new Error("An ID must be provided to delete a plan.");
+    throw new Error("An ID must be provided to delete a subscription.");
   }
 
   return (await queryBuilder().where({ id }).del() as number);
 }
 
 export async function create (data: DataClient): Promise<Data> {
-  const plans = () => data.postgres.table('subscription_plans')
+  const plans = () => data.postgres.table('user_subscriptions')
 
   return {
     get:           get(plans),

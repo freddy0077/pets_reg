@@ -22,6 +22,8 @@ export interface Pet {
   updated_at?: string
   terms_accepted?: boolean
   active?: boolean
+  subscribed?: boolean
+  doctor_id?: string
 }
 
 
@@ -52,13 +54,20 @@ export interface GetInput {
   updated_at?: string
   terms_accepted?: boolean
   active?: boolean
+  subscribed?: boolean
+  doctor_id?: string
 }
 
 export const get = (queryBuilder: () => QueryBuilder) => async (input: GetInput) => {
 
-  const qb = queryBuilder().select('pets.*')
+  const qb = queryBuilder().select('pets.*',"users.phone_number")
       .from('pets')
-      .where(input)
+      .leftJoin('users', 'users.id', 'pets.user_id')
+
+      if(input && input.id){
+        qb.where("pets.id", input.id)
+      }
+
 
   return qb.first()
 }
@@ -68,7 +77,7 @@ export const getAll = (queryBuilder: () => QueryBuilder) => async (input: GetInp
 }
 
 export const insert = (queryBuilder: () => QueryBuilder) => async (input: GetInput) => {
-  return  (await queryBuilder().insert(input, ['id']) as [{id: string}])[0]
+    (await queryBuilder().insert(input))
 }
 
 export const update = (queryBuilder: () => QueryBuilder) => async (input: GetInput) => {

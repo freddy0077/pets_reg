@@ -3,15 +3,14 @@ import {QueryBuilder} from 'knex'
 import {DataClient} from '../index'
 // import {Database} from '../../config'
 
-export interface Subscription {
+export interface Transaction {
   id?: string
-  user_id?: string
-  pet_id?: string
-  plan_id?: string | null
-  payment_method_id?: string
-  promo_code_id?: string
-  start_date?: string
-  end_date?: string
+  subscription_id?: string
+  payment_method?: string
+  amount?: number
+  date?: string
+  status?: string
+  reference?: string
 }
 
 export interface Data {
@@ -19,24 +18,23 @@ export interface Data {
   getAll: ReturnType<typeof getAll>,
   update: ReturnType<typeof update>,
   insert: ReturnType<typeof insert>,
-  deletePlan: ReturnType<typeof deletePlan>,
+  deleteTransaction: ReturnType<typeof deleteTransaction>,
 }
 
 export interface GetInput {
   id?: string
-  user_id?: string
-  pet_id?: string
-  plan_id?: string|null
-  payment_method_id?: string
-  promo_code_id?: string
-  start_date?: string
-  end_date?: string
+  subscription_id?: string
+  payment_method?: string
+  amount?: string | null
+  date?: string
+  status?: string
+  reference?: string
 }
 
 export const get = (queryBuilder: () => QueryBuilder) => async (input: GetInput) => {
 
   const qb = queryBuilder().select('user_subscriptions.*')
-      .from('plans')
+      .from('user_subscriptions')
       .where(input)
 
   return qb.first()
@@ -54,17 +52,17 @@ export const update = (queryBuilder: () => QueryBuilder) => async (input: GetInp
   const { id, ...updateFields } = input;
 
   if (!id) {
-    throw new Error("An ID must be provided to update a subscription.");
+    throw new Error("An ID must be provided to update a transaction.");
   }
 
   return (await queryBuilder().where({ id }).update(updateFields, ['id']) as [{id: string}])[0];
 }
 
-export const deletePlan = (queryBuilder: () => QueryBuilder) => async (input: GetInput) => {
+export const deleteTransaction = (queryBuilder: () => QueryBuilder) => async (input: GetInput) => {
   const { id } = input;
 
   if (!id) {
-    throw new Error("An ID must be provided to delete a subscription.");
+    throw new Error("An ID must be provided to delete a transaction.");
   }
 
   return (await queryBuilder().where({ id }).del() as number);
@@ -78,7 +76,7 @@ export async function create (data: DataClient): Promise<Data> {
     getAll:        getAll(plans),
     update:        update(plans),
     insert:        insert(plans),
-    deletePlan:    deletePlan(plans),
+    deleteTransaction:  deleteTransaction(plans),
   }
 }
 

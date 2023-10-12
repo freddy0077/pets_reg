@@ -20,12 +20,15 @@ exports.seed = async function() {
             role: "super-admin"
         },
 
-            {
-                id: randomUUID().toString(),
-                phone_number: '233242953672', email: "frederickankamah988@gmail.com",
-                password: hashedPassword,
-                role: "super-admin"
-            }
+        {
+            id: randomUUID().toString(),
+            phone_number: '233242953673', email: "doctor@gmail.com",
+            password: hashedPassword,
+            role: "doctor"
+        }
+
       ])
     })
+
+
 }

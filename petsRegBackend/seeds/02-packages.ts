@@ -1,32 +1,36 @@
 
 // import {Database} from '../src/config'
 import {DataProvider} from "../src/data";
-import * as bcrypt from "bcrypt";
 import {randomUUID} from "crypto";
 
 
 exports.seed = async function() {
     const provider = await DataProvider.create()
-    const users = () => provider.postgres.table('users')
+    const plans = () => provider.postgres.table('subscription_plans')
 
-  return  users().del()
+  return  plans().del()
     .then(async () => {
-        const hashedPassword = bcrypt.hashSync("password", 10)
-        return  users().insert([
+        return  plans().insert([
         {
             id: randomUUID().toString(),
-            phone_number: '233242953672', email: "frederickankamah988@gmail.com",
-            password: hashedPassword,
-            role: "super-admin"
+            name: "Ordinary Membership",
+            price: 70,
+            duration: 365
         },
 
         {
             id: randomUUID().toString(),
-            phone_number: '233242953673', email: "doctor@gmail.com",
-            password: hashedPassword,
-            role: "doctor"
-        }
+            name: "Gold Membership",
+            price: 120,
+            duration: 365
+        },
 
+        {
+            id: randomUUID().toString(),
+            name: "VIP Membership",
+            price: 270,
+            duration: 365
+        },
       ])
     })
 

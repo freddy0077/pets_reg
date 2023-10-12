@@ -1,6 +1,6 @@
 import {DataClient} from '../index'
-import SubscriptionPlanController , {Controller} from './SubscriptionPlanController'
-import {GetInput} from "./SubscriptionPlanData";
+import SubscriptionController , {Controller} from './SubscriptionController'
+import {GetInput} from "./SubscriptionData";
 
 
 export const get = (plans: Controller) => async (input: GetInput) => {
@@ -24,7 +24,7 @@ export const deletePlan = (plans: Controller) => async (input: GetInput) => {
 }
 
 export async function create (data: DataClient) {
-    const plans = await SubscriptionPlanController.create(data)
+    const plans = await SubscriptionController.create(data)
 
     return {
         get: get(plans),

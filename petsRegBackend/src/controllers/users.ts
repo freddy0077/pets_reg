@@ -6,6 +6,7 @@ import bcrypt from 'bcrypt';
 import {parseJwt} from "../utils/generalUtils";
 import PetHandlers from "../data/pets/PetHandlers";
 import OtpLoginHandlers from "../data/otpLogin/OtpLoginHandlers";
+import {randomUUID} from "crypto";
 
 export const getUsers =
     catchErrors(async (req, res) => {
@@ -151,7 +152,7 @@ export const sendMemberOtp = catchErrors(async (req, res) => {
     }
 
     // Fetch member details using the microchip_number
-    // const otpHandler = await OtpLoginHandlers.create(data);
+    const otpHandler = await OtpLoginHandlers.create(data);
     const petHandler = await PetHandlers.create(data);
     const memberExists = await petHandler.get({ microchip_number });
 
@@ -163,13 +164,16 @@ export const sendMemberOtp = catchErrors(async (req, res) => {
     const otp = generateOtp();
 
     await sendSms({
-        numbers: memberExists.primary_phone,
+        numbers: memberExists.phone_number,
         message: `Your verification code from Pets Registry is: ${otp}. Please do not share this code with anyone.`
     });
 
-    // otpHandler.insert({
-    //     id:
-    // })
+    await otpHandler.insert({
+        id: randomUUID().toString(),
+        user_id: memberExists?.user_id,
+        otp_code: otp,
+        channel: "sms",
+    })
 
     // Here you would store the generated OTP in your database with related details like expiration_time, used status, etc.
     // e.g., await otpHandler.save({ otp_code: otp, user_id: memberExists.id, expiration_time: ... , used: false });

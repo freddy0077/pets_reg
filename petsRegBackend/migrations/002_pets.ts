@@ -7,6 +7,7 @@ export async function up(knex: Knex) {
   await knex.schema.createTable('pets', table => {
     table.uuid('id').primary();
     table.uuid("user_id")
+    table.uuid("doctor_id")
     table.string('pet_name', 255);
     table.date('dob');
     table.string('sex', 10); // Assuming a simple Male, Female, Other categorization.
@@ -20,6 +21,7 @@ export async function up(knex: Knex) {
     table.text('special_notes');  // Using text because notes can be long.
     table.string('profile_picture_url', 255); // URL for the profile picture
     table.boolean("active").defaultTo(false)
+    table.boolean("subscribed").defaultTo(false)
     table.timestamp('created_at');
     table.timestamp('updated_at');
     table.boolean('terms_accepted').defaultTo(false);

@@ -36,7 +36,7 @@ export const get = (queryBuilder: () => QueryBuilder) => async (input: GetInput)
 }
 
 export const getAll = (queryBuilder: () => QueryBuilder) => async (input: GetInput) => {
-  return  queryBuilder().select().where(input)
+  return  queryBuilder().select().where(input).orderBy("created_at", "desc")
 }
 
 export const insert = (queryBuilder: () => QueryBuilder) => async (input: GetInput) => {

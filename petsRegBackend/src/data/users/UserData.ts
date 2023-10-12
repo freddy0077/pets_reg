@@ -14,6 +14,7 @@ export interface User {
   secondary_phone_number?: string
   address?: string
   location?: string
+  role?: string
 }
 
 
@@ -36,6 +37,7 @@ export interface GetInput {
   secondary_phone_number?: string
   address?: string
   location?: string
+  role?: string
 }
 
 export const get = (queryBuilder: () => QueryBuilder) => async (input: GetInput) => {

@@ -1,4 +1,4 @@
-import SubscriptionPlanData , {Data, GetInput} from './SubscriptionPlanData'
+import SubscriptionData , {Data, GetInput} from './SubscriptionData'
 import {DataClient} from '../index'
 
 
@@ -10,28 +10,28 @@ export interface Controller {
     deletePlan: ReturnType<typeof deletePlan>,
 }
 
-export const get = (plans: Data) => async (input: GetInput) => {
-    return plans.get(input)
+export const get = (subscriptions: Data) => async (input: GetInput) => {
+    return subscriptions.get(input)
 }
 
-export const getAll = (plans: Data) => async (input: GetInput) => {
-    return plans.getAll(input)
+export const getAll = (subscriptions: Data) => async (input: GetInput) => {
+    return subscriptions.getAll(input)
 }
 
-export const update = (plans: Data) => async (input: GetInput) => {
-    return plans.update(input)
+export const update = (subscriptions: Data) => async (input: GetInput) => {
+    return subscriptions.update(input)
 }
 
-export const insert = (plans: Data) => async (input: GetInput) => {
-    return plans.insert(input)
+export const insert = (subscriptions: Data) => async (input: GetInput) => {
+    return subscriptions.insert(input)
 }
 
-export const deletePlan = (plans: Data) => async (input: GetInput) => {
-    return plans.deletePlan(input)
+export const deletePlan = (subscriptions: Data) => async (input: GetInput) => {
+    return subscriptions.deletePlan(input)
 }
 
 export async function create (data: DataClient): Promise<Controller> {
-    const users = await SubscriptionPlanData.create(data)
+    const users = await SubscriptionData.create(data)
 
     return {
         get:        get(users),

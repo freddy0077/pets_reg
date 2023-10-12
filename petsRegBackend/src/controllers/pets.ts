@@ -4,16 +4,19 @@ import UserHandlers from "../data/users/UserHandlers";
 import {generateToken} from "../utils/auth";
 import bcrypt from 'bcrypt';
 import {parseJwt} from "../utils/generalUtils";
+import PetHandlers from "../data/pets/PetHandlers";
 
 
-export const getUsers =
+export const getPets =
     catchErrors(async (req, res) => {
         console.log("body", req.body)
         const data = await DataProvider.create()
-        const userHandler = await UserHandlers.create(data)
-        const users = await userHandler.getAll({})
+        const petHandler = await PetHandlers.create(data)
+
+
+        const pets = await petHandler.getAll({})
         return res.respond({
-            data: users
+            data: pets
         })
     })
 
