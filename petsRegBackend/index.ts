@@ -37,6 +37,8 @@ const initializeExpress = async () => {
 
     app.use(cors());
     const allowedOrigins = [
+        'http://petsreg.com',
+        'https://petsreg.com',
         'http://localhost:5173',
         'http://localhost:5174',
     ];
