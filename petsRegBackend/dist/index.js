@@ -59,11 +59,10 @@ const initializeExpress = () => __awaiter(void 0, void 0, void 0, function* () {
     });
     app.use((0, cors_1.default)());
     const allowedOrigins = [
-        'changeverveacademy.com',
-        'http://localhost:3000',
-        'http://localhost:3001',
+        'http://petsreg.com',
+        'https://petsreg.com',
         'http://localhost:5173',
-        'http://sm-beta-changeverveacademy.com',
+        'http://localhost:5174',
     ];
     app.use((0, cors_1.default)({
         origin: function (origin, callback) {
@@ -84,18 +83,10 @@ const initializeExpress = () => __awaiter(void 0, void 0, void 0, function* () {
     // app.use(express.urlencoded())
     app.use(body_parser_1.default.urlencoded({ extended: true }));
     app.use(response_1.addRespondToResponse);
-    // Sentry.init({
-    //     dsn: "https://0f9b603297a1473188c6584dd1858f0d@o4504661266333696.ingest.sentry.io/4504661284487168",
-    //     integrations: [
-    //         new Sentry.Integrations.Http({tracing: true}),
-    //         new Tracing.Integrations.Express({app}),
-    //     ],
-    //     tracesSampleRate: 1.0,
-    // });
     app.use(errors_1.handleError);
     (0, routes_1.attachPublicRoutes)(app);
-    app.listen(5055, () => {
-        console.log(`Server listening  5055`);
+    app.listen(5008, () => {
+        console.log(`Server listening  5008`);
     });
 });
 const initializeApp = () => __awaiter(void 0, void 0, void 0, function* () {

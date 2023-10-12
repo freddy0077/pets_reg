@@ -1,6 +1,6 @@
 import {DataClient} from '../index'
-import SubscriptionController , {Controller} from './SubscriptionController'
-import {GetInput} from "./SubscriptionData";
+import SubscriptionController , {Controller} from './TransactionController'
+import {GetInput} from "./TransactionData";
 
 
 export const get = (plans: Controller) => async (input: GetInput) => {

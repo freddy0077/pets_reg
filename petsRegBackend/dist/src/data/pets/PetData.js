@@ -20,11 +20,14 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.create = exports.deleteUser = exports.update = exports.insert = exports.getAll = exports.get = void 0;
+exports.create = exports.deletePet = exports.update = exports.insert = exports.getAll = exports.get = void 0;
 const get = (queryBuilder) => (input) => __awaiter(void 0, void 0, void 0, function* () {
-    const qb = queryBuilder().select('users.*')
-        .from('users')
-        .where(input);
+    const qb = queryBuilder().select('pets.*', "users.phone_number")
+        .from('pets')
+        .leftJoin('users', 'users.id', 'pets.user_id');
+    if (input && input.id) {
+        qb.where("pets.id", input.id);
+    }
     return qb.first();
 });
 exports.get = get;
@@ -33,38 +36,38 @@ const getAll = (queryBuilder) => (input) => __awaiter(void 0, void 0, void 0, fu
 });
 exports.getAll = getAll;
 const insert = (queryBuilder) => (input) => __awaiter(void 0, void 0, void 0, function* () {
-    return (yield queryBuilder().insert(input, ['id']))[0];
+    (yield queryBuilder().insert(input));
 });
 exports.insert = insert;
 const update = (queryBuilder) => (input) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = input, updateFields = __rest(input, ["id"]);
     if (!id) {
-        throw new Error("An ID must be provided to update a user.");
+        throw new Error("An ID must be provided to update a pet.");
     }
     return (yield queryBuilder().where({ id }).update(updateFields, ['id']))[0];
 });
 exports.update = update;
-const deleteUser = (queryBuilder) => (input) => __awaiter(void 0, void 0, void 0, function* () {
+const deletePet = (queryBuilder) => (input) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = input;
     if (!id) {
-        throw new Error("An ID must be provided to delete a user.");
+        throw new Error("An ID must be provided to delete a pet.");
     }
     return yield queryBuilder().where({ id }).del();
 });
-exports.deleteUser = deleteUser;
+exports.deletePet = deletePet;
 function create(data) {
     return __awaiter(this, void 0, void 0, function* () {
         // const users = () => data.postgres.withSchema(Database.schema).table('User')
-        const users = () => data.postgres.table('users');
+        const pets = () => data.postgres.table('pets');
         return {
-            get: (0, exports.get)(users),
-            getAll: (0, exports.getAll)(users),
-            update: (0, exports.update)(users),
-            insert: (0, exports.insert)(users),
-            deleteUser: (0, exports.deleteUser)(users),
+            get: (0, exports.get)(pets),
+            getAll: (0, exports.getAll)(pets),
+            update: (0, exports.update)(pets),
+            insert: (0, exports.insert)(pets),
+            deletePet: (0, exports.deletePet)(pets),
         };
     });
 }
 exports.create = create;
 exports.default = { create };
-//# sourceMappingURL=UserData.js.map
+//# sourceMappingURL=PetData.js.map

@@ -1,4 +1,4 @@
-import SubscriptionData , {Data, GetInput} from './SubscriptionData'
+import SubscriptionData , {Data, GetInput} from './TransactionData'
 import {DataClient} from '../index'
 
 
@@ -27,7 +27,7 @@ export const insert = (subscriptions: Data) => async (input: GetInput) => {
 }
 
 export const deletePlan = (subscriptions: Data) => async (input: GetInput) => {
-    return subscriptions.deletePlan(input)
+    return subscriptions.deleteTransaction(input)
 }
 
 export async function create (data: DataClient): Promise<Controller> {

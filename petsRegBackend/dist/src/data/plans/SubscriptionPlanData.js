@@ -20,16 +20,16 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.create = exports.deleteUser = exports.update = exports.insert = exports.getAll = exports.get = void 0;
+exports.create = exports.deletePlan = exports.update = exports.insert = exports.getAll = exports.get = void 0;
 const get = (queryBuilder) => (input) => __awaiter(void 0, void 0, void 0, function* () {
-    const qb = queryBuilder().select('users.*')
-        .from('users')
+    const qb = queryBuilder().select('plans.*')
+        .from('plans')
         .where(input);
     return qb.first();
 });
 exports.get = get;
 const getAll = (queryBuilder) => (input) => __awaiter(void 0, void 0, void 0, function* () {
-    return queryBuilder().select().where(input);
+    return queryBuilder().select().where(input).orderBy("created_at", "desc");
 });
 exports.getAll = getAll;
 const insert = (queryBuilder) => (input) => __awaiter(void 0, void 0, void 0, function* () {
@@ -39,32 +39,31 @@ exports.insert = insert;
 const update = (queryBuilder) => (input) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = input, updateFields = __rest(input, ["id"]);
     if (!id) {
-        throw new Error("An ID must be provided to update a user.");
+        throw new Error("An ID must be provided to update a plan.");
     }
     return (yield queryBuilder().where({ id }).update(updateFields, ['id']))[0];
 });
 exports.update = update;
-const deleteUser = (queryBuilder) => (input) => __awaiter(void 0, void 0, void 0, function* () {
+const deletePlan = (queryBuilder) => (input) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = input;
     if (!id) {
-        throw new Error("An ID must be provided to delete a user.");
+        throw new Error("An ID must be provided to delete a plan.");
     }
     return yield queryBuilder().where({ id }).del();
 });
-exports.deleteUser = deleteUser;
+exports.deletePlan = deletePlan;
 function create(data) {
     return __awaiter(this, void 0, void 0, function* () {
-        // const users = () => data.postgres.withSchema(Database.schema).table('User')
-        const users = () => data.postgres.table('users');
+        const plans = () => data.postgres.table('subscription_plans');
         return {
-            get: (0, exports.get)(users),
-            getAll: (0, exports.getAll)(users),
-            update: (0, exports.update)(users),
-            insert: (0, exports.insert)(users),
-            deleteUser: (0, exports.deleteUser)(users),
+            get: (0, exports.get)(plans),
+            getAll: (0, exports.getAll)(plans),
+            update: (0, exports.update)(plans),
+            insert: (0, exports.insert)(plans),
+            deletePlan: (0, exports.deletePlan)(plans),
         };
     });
 }
 exports.create = create;
 exports.default = { create };
-//# sourceMappingURL=UserData.js.map
+//# sourceMappingURL=SubscriptionPlanData.js.map

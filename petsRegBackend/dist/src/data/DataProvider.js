@@ -13,12 +13,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.create = void 0;
-const PostgresProvider_1 = __importDefault(require("./PostgresProvider"));
+const MysqlProvider_1 = __importDefault(require("./MysqlProvider"));
 const RedisProvider_1 = __importDefault(require("./RedisProvider"));
 function create() {
     return __awaiter(this, void 0, void 0, function* () {
         return {
-            postgres: yield PostgresProvider_1.default.create(),
+            postgres: yield MysqlProvider_1.default.create(),
             redis: yield RedisProvider_1.default.create(),
         };
     });

@@ -4,13 +4,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Redis = exports.Knex = exports.Server = exports.Database = void 0;
-// import * as parseDbUrl from 'parse-database-url'
 const parse_database_url_1 = __importDefault(require("parse-database-url"));
 require("dotenv/config");
 var Database;
 (function (Database) {
     Database.schema = 'api';
-    Database.url = process.env.DATABASE_URL || 'postgres://postgres:postgres@localhost:5432/changeMgDB';
+    // NOTE: DATABASE_URL format will need to change for MySQL if used.
+    // export const url = process.env.DATABASE_URL || 'mysql://root:password@localhost:3306/changeMgDB';
+    // export const url = process.env.DATABASE_URL || 'mysql://root:password@localhost:3306/changeMgDB';
+    Database.url = process.env.DATABASE_URL || 'mysql://pets_reg_user:M@roon$$88@localhost:3306/pets_reg_db';
+    console.log("mysql db", Database.url);
     Database.config = (0, parse_database_url_1.default)(Database.url);
     Database.database = Database.config.database, Database.user = Database.config.user, Database.name = Database.config.name, Database.username = Database.config.username, Database.password = Database.config.password, Database.hostname = Database.config.hostname, Database.host = Database.config.host, Database.port = Database.config.port;
     Database.poolMin = Number(process.env.DATABASE_POOL_MIN || '0');
@@ -27,27 +30,25 @@ var Server;
 var Knex;
 (function (Knex) {
     Knex.config = {
-        client: 'postgresql',
+        client: 'mysql',
         connection: {
-            host: process.env.POSTGRES_HOST || Database.host,
-            database: process.env.POSTGRES_DB || Database.database,
-            user: process.env.POSTGRES_USER || Database.user,
-            password: process.env.POSTGRES_PASSWORD || Database.password,
-            port: process.env.POSTGRES_PORT || Database.port,
+            host: process.env.MYSQL_HOST || Database.host,
+            database: process.env.MYSQL_DB || Database.database,
+            user: process.env.MYSQL_USER || Database.user,
+            password: process.env.MYSQL_PASSWORD || Database.password,
+            port: process.env.MYSQL_PORT || Database.port,
         },
         pool: {
-            min: process.env.DATABASE_POOL_MIN,
-            max: process.env.DATABASE_POOL_MAX,
-            idle: process.env.DATABASE_POOL_IDLE,
+            min: Database.poolMin,
+            max: Database.poolMax,
+            idle: Database.poolIdle,
         },
         migrations: {
             tableName: 'KnexMigrations',
         },
-        // development: {
         seeds: {
             directory: './seeds'
         }
-        // }
     };
 })(Knex = exports.Knex || (exports.Knex = {}));
 var Redis;

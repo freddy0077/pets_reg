@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.humanReadableDate = exports.parseJwt = exports.generateVerificationCode = exports.randomChars = void 0;
+exports.unslugify = exports.humanReadableDate = exports.parseJwt = exports.generateVerificationCode = exports.randomChars = void 0;
 const randomChars = count => {
     const possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
     return Array.from({ length: count }, () => possible[Math.floor(Math.random() * possible.length)]).join('');
@@ -26,4 +26,10 @@ const humanReadableDate = (dateString) => {
     console.log(humanReadableDate); // Outputs: "30 May 2023"
 };
 exports.humanReadableDate = humanReadableDate;
+const unslugify = (slug) => {
+    return slug === null || slug === void 0 ? void 0 : slug.split(/[-_]/).map(word => // map over each word
+     word.charAt(0).toUpperCase() + word.slice(1) // capitalize the first letter of each word
+    ).join(' '); // join the words back together with spaces
+};
+exports.unslugify = unslugify;
 //# sourceMappingURL=generalUtils.js.map

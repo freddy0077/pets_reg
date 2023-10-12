@@ -20,10 +20,12 @@ var __rest = (this && this.__rest) || function (s, e) {
     return t;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.create = exports.deleteUser = exports.update = exports.insert = exports.getAll = exports.get = void 0;
+exports.create = exports.deleteOtp = exports.update = exports.insert = exports.getAll = exports.get = void 0;
 const get = (queryBuilder) => (input) => __awaiter(void 0, void 0, void 0, function* () {
-    const qb = queryBuilder().select('users.*')
-        .from('users')
+    // return  queryBuilder().select().where(input).first()
+    const qb = queryBuilder().select('otp_logins.*', 'users.email', 'users.firstName', "users.lastName", "users.phone_number")
+        .leftJoin("users", "users.id", "otp_logins.user_id")
+        .from('otp_logins')
         .where(input);
     return qb.first();
 });
@@ -39,32 +41,31 @@ exports.insert = insert;
 const update = (queryBuilder) => (input) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = input, updateFields = __rest(input, ["id"]);
     if (!id) {
-        throw new Error("An ID must be provided to update a user.");
+        throw new Error("An ID must be provided to update an otp.");
     }
     return (yield queryBuilder().where({ id }).update(updateFields, ['id']))[0];
 });
 exports.update = update;
-const deleteUser = (queryBuilder) => (input) => __awaiter(void 0, void 0, void 0, function* () {
+const deleteOtp = (queryBuilder) => (input) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = input;
     if (!id) {
-        throw new Error("An ID must be provided to delete a user.");
+        throw new Error("An ID must be provided to delete an otp.");
     }
     return yield queryBuilder().where({ id }).del();
 });
-exports.deleteUser = deleteUser;
+exports.deleteOtp = deleteOtp;
 function create(data) {
     return __awaiter(this, void 0, void 0, function* () {
-        // const users = () => data.postgres.withSchema(Database.schema).table('User')
-        const users = () => data.postgres.table('users');
+        const otp = () => data.postgres.table('otp_logins');
         return {
-            get: (0, exports.get)(users),
-            getAll: (0, exports.getAll)(users),
-            update: (0, exports.update)(users),
-            insert: (0, exports.insert)(users),
-            deleteUser: (0, exports.deleteUser)(users),
+            get: (0, exports.get)(otp),
+            getAll: (0, exports.getAll)(otp),
+            update: (0, exports.update)(otp),
+            insert: (0, exports.insert)(otp),
+            deleteOtp: (0, exports.deleteOtp)(otp),
         };
     });
 }
 exports.create = create;
 exports.default = { create };
-//# sourceMappingURL=UserData.js.map
+//# sourceMappingURL=OtpLoginData.js.map
