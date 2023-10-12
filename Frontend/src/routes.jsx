@@ -24,12 +24,20 @@ import LostAndFound from "@/pages/LostAndFound";
 import NewLost from "@/pages/NewLost";
 
 export const routes = [
+  // {
+  //   icon: HomeIcon,
+  //   name: "home",
+  //   path: "/home",
+  //   element: <Home />,
+  // },
+
   {
-    icon: HomeIcon,
-    name: "home",
+    icon: ArrowRightOnRectangleIcon,
+    name: "Home",
     path: "/home",
-    element: <Home />,
+    element: <LoginComponent />,
   },
+
   {
     icon: UserCircleIcon,
     name: "profile",
